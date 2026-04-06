@@ -4,707 +4,124 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shroommush — Farm Fresh Oyster Mushrooms, Kerala</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --cream: #F7F3EC; --cream-dark: #EDE6D8;
-    --forest: #2C4A2E; --forest-light: #3D6B40;
-    --moss: #6B8C4E; --white: #FEFCF8;
-    --ink: #1A1A18; --ink-light: #4A4A42;
-    --gold: #D4A843; --spore: #9FB88A;
-    --font-display: 'Playfair Display', Georgia, serif;
-    --font-body: 'DM Sans', system-ui, sans-serif;
-    --radius-lg: 16px;
-    --shadow: 0 8px 40px rgba(44,74,46,0.1);
-    --shadow-hover: 0 16px 60px rgba(44,74,46,0.18);
-    --nav-h: 70px;
-  }
-  html { scroll-behavior: smooth; }
-  body { font-family: var(--font-body); background: var(--white); color: var(--ink); overflow-x: hidden; }
-
-  /* DISCOUNT BANNER */
-  #discountBanner {
-    display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; z-index: 98;
-    background: linear-gradient(135deg, #D4A843, #B8922E);
-    color: #1A1A18; padding: 0.65rem 4vw;
-    align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
-    animation: slideDown 0.4s cubic-bezier(0.34,1.56,0.64,1);
-    box-shadow: 0 4px 20px rgba(212,168,67,0.35);
-  }
-  #discountBanner.show { display: flex; }
-  @keyframes slideDown { from { transform: translateY(-100%); opacity:0; } to { transform: translateY(0); opacity:1; } }
-  .banner-text { font-size: 0.88rem; font-weight: 600; text-align: center; }
-  .banner-code { background: rgba(0,0,0,0.18); border-radius: 5px; padding: 0.15rem 0.6rem; font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; font-family: monospace; }
-  .banner-shop-btn { background: var(--forest); color: var(--white); border: none; border-radius: 20px; padding: 0.32rem 0.9rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: var(--font-body); transition: background 0.2s; white-space: nowrap; }
-  .banner-shop-btn:hover { background: var(--forest-light); }
-  .banner-close { background: rgba(0,0,0,0.18); border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 0.8rem; color: #1A1A18; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .banner-close:hover { background: rgba(0,0,0,0.28); }
-
-  /* NAV */
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: var(--nav-h); background: rgba(254,252,248,0.94); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(44,74,46,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 5vw; }
-  .nav-logo { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--forest); text-decoration: none; letter-spacing: -0.02em; display: flex; align-items: center; gap: 10px; cursor: pointer; }
-  .nav-logo span { display: inline-block; width: 36px; height: 36px; background: var(--forest); border-radius: 50%; position: relative; overflow: hidden; flex-shrink: 0; }
-  .nav-logo span::before { content: ''; position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%); width: 14px; height: 16px; background: var(--gold); border-radius: 2px; }
-  .nav-logo span::after { content: ''; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 26px; height: 10px; background: var(--spore); border-radius: 30px 30px 0 0; }
-  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
-  .nav-links a { font-size: 0.9rem; font-weight: 500; color: var(--ink-light); text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s; cursor: pointer; }
-  .nav-links a:hover, .nav-links a.active { color: var(--forest); }
-  .nav-cta { background: var(--forest) !important; color: var(--white) !important; padding: 0.55rem 1.4rem; border-radius: 40px; font-weight: 600 !important; }
-  .nav-cta:hover { background: var(--forest-light) !important; }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
-  .hamburger span { display: block; width: 24px; height: 2px; background: var(--forest); border-radius: 2px; }
-  .mobile-menu { display: none; position: fixed; top: var(--nav-h); left: 0; right: 0; background: var(--white); border-bottom: 1px solid rgba(44,74,46,0.1); padding: 1.5rem 5vw 2rem; z-index: 99; flex-direction: column; gap: 1.2rem; }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { font-size: 1.1rem; font-weight: 500; color: var(--ink); text-decoration: none; padding: 0.5rem 0; border-bottom: 1px solid rgba(44,74,46,0.08); cursor: pointer; }
-
-  /* PAGES */
-  .page { display: none; padding-top: var(--nav-h); }
-  .page.active { display: block; }
-
-  /* HERO */
-  .hero { min-height: calc(100vh - var(--nav-h)); background: var(--cream); display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 6rem 5vw 4rem; gap: 4rem; position: relative; overflow: hidden; }
-  .hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(107,140,78,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
-  .hero-text { animation: fadeUp 0.8s ease both; }
-  .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: rgba(44,74,46,0.08); color: var(--forest); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.4rem 1rem; border-radius: 40px; margin-bottom: 1.5rem; }
-  .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
-  .hero h1 { font-family: var(--font-display); font-size: clamp(2.8rem,5vw,4.2rem); line-height: 1.1; color: var(--forest); margin-bottom: 1.2rem; letter-spacing: -0.02em; }
-  .hero h1 em { color: var(--moss); font-style: italic; }
-  .hero p { font-size: 1.05rem; color: var(--ink-light); line-height: 1.75; max-width: 420px; margin-bottom: 2rem; }
-  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
-  .btn-primary { background: var(--forest); color: var(--white); padding: 0.85rem 2rem; border-radius: 40px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; display: inline-block; text-decoration: none; font-family: var(--font-body); }
-  .btn-primary:hover { background: var(--forest-light); transform: translateY(-2px); }
-  .btn-outline { background: transparent; color: var(--forest); padding: 0.85rem 2rem; border-radius: 40px; border: 1.5px solid var(--forest); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-block; font-family: var(--font-body); }
-  .btn-outline:hover { background: var(--forest); color: var(--white); }
-  .hero-visual { display: flex; align-items: center; justify-content: center; animation: fadeUp 0.8s 0.2s ease both; }
-  .mushroom-showcase { width: min(420px,90%); aspect-ratio: 1; background: var(--forest); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-  .mushroom-showcase::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg,rgba(107,140,78,0.3) 0%,transparent 60%); }
-  .mushroom-art { width: 75%; height: 75%; }
-  .hero-badge { position: absolute; bottom: -20px; right: 20px; background: var(--gold); color: var(--forest); border-radius: var(--radius-lg); padding: 0.8rem 1.2rem; font-size: 0.78rem; font-weight: 700; text-align: center; box-shadow: var(--shadow); }
-
-  /* STATS */
-  .stats-bar { background: var(--forest); padding: 2.5rem 5vw; display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 2rem; text-align: center; }
-  .stat-item { color: var(--white); }
-  .stat-num { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--gold); display: block; }
-  .stat-label { font-size: 0.82rem; font-weight: 500; opacity: 0.75; letter-spacing: 0.06em; text-transform: uppercase; }
-
-  /* ABOUT */
-  .about-strip { padding: 5rem 5vw; background: var(--white); display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-  .section-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--moss); margin-bottom: 0.8rem; display: block; }
-  .section-h2 { font-family: var(--font-display); font-size: clamp(1.8rem,3vw,2.6rem); line-height: 1.2; color: var(--forest); margin-bottom: 1.2rem; }
-  .body-text { color: var(--ink-light); line-height: 1.8; font-size: 0.98rem; margin-bottom: 1rem; }
-  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.5rem; }
-  .feature-card { background: var(--cream); border-radius: var(--radius-lg); padding: 1.2rem; }
-  .feature-icon { width: 40px; height: 40px; background: var(--forest); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.7rem; }
-  .feature-card h4 { font-weight: 600; font-size: 0.9rem; color: var(--forest); margin-bottom: 0.3rem; }
-  .feature-card p { font-size: 0.82rem; color: var(--ink-light); line-height: 1.5; }
-  .mosaic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px; gap: 12px; }
-  .mosaic-block { border-radius: var(--radius-lg); overflow: hidden; }
-  .mosaic-block:first-child { grid-row: 1/3; background: var(--forest); display: flex; align-items: center; justify-content: center; }
-  .mosaic-block:nth-child(2) { background: var(--cream-dark); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; }
-  .mosaic-block:nth-child(3) { background: var(--moss); display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; }
-
-  /* PAGE HERO */
-  .page-hero { background: var(--cream); padding: 5rem 5vw 4rem; text-align: center; }
-  .page-hero h1 { font-family: var(--font-display); font-size: clamp(2.2rem,4vw,3.5rem); color: var(--forest); margin-bottom: 0.8rem; }
-  .page-hero p { color: var(--ink-light); max-width: 540px; margin: 0 auto; font-size: 1rem; line-height: 1.7; }
-
-  /* PRODUCTS */
-  .products-section { padding: 4rem 5vw 5rem; background: var(--white); }
-  .products-filter { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 2.5rem; justify-content: center; }
-  .filter-btn { background: transparent; border: 1.5px solid var(--cream-dark); color: var(--ink-light); padding: 0.5rem 1.3rem; border-radius: 40px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
-  .filter-btn.active, .filter-btn:hover { background: var(--forest); border-color: var(--forest); color: var(--white); }
-  .products-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(255px,1fr)); gap: 1.8rem; }
-  .product-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid rgba(44,74,46,0.1); overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; }
-  .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
-  .product-img { height: 185px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  .product-badge { position: absolute; top: 12px; left: 12px; background: var(--gold); color: var(--forest); font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 40px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .product-info { padding: 1.3rem; }
-  .product-name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 700; color: var(--forest); margin-bottom: 0.35rem; }
-  .product-desc { font-size: 0.83rem; color: var(--ink-light); line-height: 1.6; margin-bottom: 0.6rem; }
-  .product-weight { font-size: 0.76rem; color: var(--moss); font-weight: 600; margin-bottom: 0.9rem; }
-  .product-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .product-price { font-size: 1.05rem; font-weight: 700; color: var(--forest); }
-  .product-price span { font-size: 0.76rem; font-weight: 400; color: var(--ink-light); }
-
-  /* WhatsApp Buy Button */
-  .buy-btn {
-    background: #25D366; color: #fff;
-    border: none; border-radius: 40px; padding: 0.52rem 1.1rem;
-    font-size: 0.83rem; font-weight: 700; cursor: pointer;
-    transition: background 0.2s, transform 0.15s; font-family: var(--font-body);
-    display: inline-flex; align-items: center; gap: 5px; text-decoration: none;
-    white-space: nowrap;
-  }
-  .buy-btn:hover { background: #1DA855; transform: translateY(-1px); }
-  .buy-btn svg { width: 15px; height: 15px; flex-shrink: 0; fill: #fff; }
-
-  /* RECIPES */
-  .recipes-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 2rem; padding: 4rem 5vw; }
-  .recipe-card { background: var(--white); border-radius: var(--radius-lg); border: 1px solid rgba(44,74,46,0.1); overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; }
-  .recipe-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
-  .recipe-img { height: 190px; display: flex; align-items: center; justify-content: center; font-size: 3.5rem; position: relative; }
-  .recipe-meta-tags { position: absolute; bottom: 12px; left: 12px; display: flex; gap: 6px; }
-  .tag { background: rgba(254,252,248,0.9); color: var(--forest); font-size: 0.7rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 40px; }
-  .recipe-info { padding: 1.3rem; }
-  .recipe-name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 700; color: var(--forest); margin-bottom: 0.35rem; }
-  .recipe-desc { font-size: 0.84rem; color: var(--ink-light); line-height: 1.6; margin-bottom: 0.9rem; }
-  .recipe-stats { display: flex; gap: 1rem; margin-bottom: 1.1rem; }
-  .recipe-stat { font-size: 0.77rem; color: var(--ink-light); }
-  .recipe-stat strong { color: var(--forest); }
-  .view-recipe-btn { width: 100%; background: var(--cream); color: var(--forest); border: 1.5px solid rgba(44,74,46,0.2); border-radius: 40px; padding: 0.68rem; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
-  .view-recipe-btn:hover { background: var(--forest); color: var(--white); border-color: var(--forest); }
-
-  /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(26,26,24,0.65); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem; }
-  .modal-overlay.open { display: flex; }
-  .modal-box { background: var(--white); border-radius: 24px; width: 100%; max-width: 490px; max-height: 90vh; overflow-y: auto; padding: 2.5rem; position: relative; animation: modalIn 0.3s ease; }
-  @keyframes modalIn { from { transform: scale(0.94) translateY(20px); opacity:0; } to { transform: scale(1) translateY(0); opacity:1; } }
-  .modal-close { position: absolute; top: 1.2rem; right: 1.2rem; background: var(--cream); border: none; width: 33px; height: 33px; border-radius: 50%; cursor: pointer; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; color: var(--ink); }
-  .modal-close:hover { background: var(--cream-dark); }
-  .lead-form-header { margin-bottom: 1.5rem; }
-  .lead-form-header h3 { font-family: var(--font-display); font-size: 1.4rem; color: var(--forest); margin-bottom: 0.4rem; }
-  .lead-form-header p { font-size: 0.87rem; color: var(--ink-light); line-height: 1.65; }
-  .discount-pill { display: inline-block; background: rgba(212,168,67,0.15); color: #8B6200; border: 1px solid rgba(212,168,67,0.4); border-radius: 20px; padding: 0.3rem 0.9rem; font-size: 0.78rem; font-weight: 700; margin-bottom: 1rem; }
-  .form-group { margin-bottom: 1rem; }
-  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--ink); margin-bottom: 0.35rem; }
-  .form-group input { width: 100%; padding: 0.72rem 1rem; border: 1.5px solid rgba(44,74,46,0.2); border-radius: 10px; font-size: 0.93rem; font-family: var(--font-body); color: var(--ink); background: var(--white); transition: border-color 0.2s; outline: none; }
-  .form-group input:focus { border-color: var(--forest); }
-  .form-submit { width: 100%; background: var(--forest); color: var(--white); border: none; border-radius: 40px; padding: 0.9rem; font-size: 0.97rem; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: var(--font-body); margin-top: 0.2rem; }
-  .form-submit:hover { background: var(--forest-light); }
-  .form-submit:disabled { opacity: 0.7; cursor: not-allowed; }
-  .success-msg { display: none; text-align: center; padding: 0.8rem 1rem; background: rgba(107,140,78,0.12); border-radius: 10px; color: var(--forest); font-weight: 600; margin-bottom: 1rem; font-size: 0.88rem; line-height: 1.5; }
-  .success-msg.show { display: block; }
-  .recipe-full-content { display: none; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(44,74,46,0.1); }
-  .recipe-full-content.visible { display: block; }
-  .recipe-full-content h4 { font-family: var(--font-display); font-size: 1.05rem; color: var(--forest); margin-bottom: 0.7rem; }
-  .recipe-full-content ul, .recipe-full-content ol { padding-left: 1.4rem; color: var(--ink-light); font-size: 0.87rem; line-height: 1.85; margin-bottom: 1.2rem; }
-  .tip-box { background: var(--cream); border-radius: 12px; padding: 1rem; margin-top: 0.5rem; }
-  .tip-box strong { color: var(--forest); font-size: 0.84rem; }
-  .tip-box p { font-size: 0.82rem; color: var(--ink-light); margin-top: 0.3rem; line-height: 1.6; }
-
-  /* CONTACT */
-  .contact-section { padding: 5rem 5vw; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; max-width: 1100px; margin: 0 auto; }
-  .contact-item { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem; }
-  .contact-icon { width: 44px; height: 44px; background: var(--cream); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-  .contact-item h4 { font-weight: 600; font-size: 0.9rem; color: var(--forest); }
-  .contact-item p { font-size: 0.85rem; color: var(--ink-light); line-height: 1.5; margin-top: 2px; }
-  .contact-form-box { background: var(--cream); border-radius: 24px; padding: 2.5rem; }
-  .contact-form-box h3 { font-family: var(--font-display); font-size: 1.4rem; color: var(--forest); margin-bottom: 0.4rem; }
-  .contact-form-box > p { font-size: 0.87rem; color: var(--ink-light); margin-bottom: 1.5rem; }
-  .form-group select { width: 100%; padding: 0.72rem 1rem; border: 1.5px solid rgba(44,74,46,0.2); border-radius: 10px; font-size: 0.93rem; font-family: var(--font-body); color: var(--ink); background: var(--white); outline: none; }
-
-  /* FOOTER */
-  footer { background: var(--forest); color: var(--white); padding: 4rem 5vw 2rem; }
-  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
-  .footer-brand h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); margin-bottom: 0.7rem; }
-  .footer-brand p { font-size: 0.85rem; opacity: 0.7; line-height: 1.7; max-width: 260px; }
-  .footer-col h4 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.55; margin-bottom: 1rem; }
-  .footer-col a { display: block; font-size: 0.87rem; opacity: 0.75; color: var(--white); text-decoration: none; margin-bottom: 0.55rem; cursor: pointer; transition: opacity 0.2s; }
-  .footer-col a:hover { opacity: 1; }
-  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-  .footer-bottom p { font-size: 0.82rem; opacity: 0.5; }
-  .social-links { display: flex; gap: 1rem; }
-  .social-link { width: 36px; height: 36px; background: rgba(255,255,255,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--white); font-size: 0.85rem; cursor: pointer; transition: background 0.2s; text-decoration: none; font-weight: 700; }
-  .social-link:hover { background: rgba(255,255,255,0.2); }
-
-  /* TOAST */
-  .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 300; background: var(--forest); color: var(--white); padding: 1rem 1.5rem; border-radius: 12px; font-size: 0.88rem; font-weight: 500; box-shadow: var(--shadow); transform: translateY(120px); opacity: 0; transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1); max-width: 310px; pointer-events: none; }
-  .toast.show { transform: translateY(0); opacity: 1; }
-  .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-left: 6px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes fadeUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
-
-  .pc-white { background: linear-gradient(135deg,#EEEEED,#D2D2CE); }
-  .pc-grey { background: linear-gradient(135deg,#D5D8DE,#ACAEB8); }
-  .pc-pink { background: linear-gradient(135deg,#EDD8E5,#D4A8C5); }
-  .pc-dried { background: linear-gradient(135deg,#ECE0C5,#CCAA78); }
-  .pc-chutney { background: linear-gradient(135deg,#E8DEC8,#C5A868); }
-  .pc-soup { background: linear-gradient(135deg,#D8E5EC,#A0C0CC); }
-  .pc-pickle { background: linear-gradient(135deg,#EDD5C0,#C8956A); }
-  .rc1 { background: linear-gradient(135deg,#2C4A2E,#3D6B40); }
-  .rc2 { background: linear-gradient(135deg,#4A3A2C,#6B5540); }
-  .rc3 { background: linear-gradient(135deg,#2C3A4A,#40556A); }
-  .rc4 { background: linear-gradient(135deg,#3A2C4A,#554060); }
-  .rc5 { background: linear-gradient(135deg,#4A4A2C,#646440); }
-  .rc6 { background: linear-gradient(135deg,#2C4A44,#406B64); }
-
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .hero { grid-template-columns: 1fr; padding: 3rem 5vw 4rem; text-align: center; }
-    .hero-visual { order: -1; }
-    .hero p { margin: 0 auto 2rem; }
-    .hero-btns { justify-content: center; }
-    .mushroom-showcase { width: 240px; }
-    .about-strip { grid-template-columns: 1fr; gap: 2.5rem; }
-    .mosaic { display: none; }
-    .contact-section { grid-template-columns: 1fr; gap: 2rem; }
-    .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
-    .footer-brand { grid-column: 1/-1; }
-  }
-  @media (max-width: 480px) {
-    .footer-grid { grid-template-columns: 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
-    .hero-btns { flex-direction: column; align-items: center; }
-    .modal-box { padding: 1.8rem; }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- DISCOUNT BANNER -->
 <div id="discountBanner">
   <span class="banner-text">🎉 <strong>Get up to 20% OFF</strong> on your next direct purchase! Use code <span class="banner-code">SHROOM20</span> on WhatsApp</span>
-  <button class="banner-shop-btn" onclick="showPage('products');hideBanner()">Shop Now</button>
+  <a class="banner-shop-btn" href="products.html" onclick="hideBanner()">Shop Now</a>
   <button class="banner-close" onclick="hideBanner()" aria-label="Close">✕</button>
 </div>
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo" onclick="showPage('home')"><span></span>Shroommush</div>
-  <ul class="nav-links" id="navLinks">
-    <li><a onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
-    <li><a onclick="showPage('products')" id="nav-products">Products</a></li>
-    <li><a onclick="showPage('recipes')" id="nav-recipes">Recipes</a></li>
-    <li><a onclick="showPage('contact')" class="nav-cta" id="nav-contact">Order Now</a></li>
+  <a class="nav-logo" href="index.html"><span></span>Shroommush</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="products.html">Products</a></li>
+    <li><a href="recipes.html">Recipes</a></li>
+    <li><a href="contact.html" class="nav-cta">Order Now</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a onclick="showPage('home');toggleMenu()">Home</a>
-  <a onclick="showPage('products');toggleMenu()">Products</a>
-  <a onclick="showPage('recipes');toggleMenu()">Recipes</a>
-  <a onclick="showPage('contact');toggleMenu()">Order Now</a>
+  <a href="index.html">Home</a>
+  <a href="products.html">Products</a>
+  <a href="recipes.html">Recipes</a>
+  <a href="contact.html">Order Now</a>
 </div>
 
-<!-- HOME -->
-<div class="page active" id="page-home">
-  <section class="hero">
-    <div class="hero-text">
-      <div class="hero-eyebrow">Farm Fresh from Kerala</div>
-      <h1>Where Fungi<br>Meets <em>Flavour</em></h1>
-      <p>Handpicked oyster mushrooms grown with care in the heart of Kerala. Earthy, tender, and bursting with goodness — straight from our farm to your table.</p>
-      <div class="hero-btns">
-        <button class="btn-primary" onclick="showPage('products')">Shop Now</button>
-        <button class="btn-outline" onclick="showPage('recipes')">Explore Recipes</button>
-      </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Farm Fresh from Kerala</div>
+    <h1>Where Fungi<br>Meets <em>Flavour</em></h1>
+    <p>Handpicked oyster mushrooms grown with care in the heart of Kerala. Earthy, tender, and bursting with goodness — straight from our farm to your table.</p>
+    <div class="hero-btns">
+      <a href="products.html" class="btn-primary">Shop Now</a>
+      <a href="recipes.html" class="btn-outline">Explore Recipes</a>
     </div>
-    <div class="hero-visual">
-      <div class="mushroom-showcase">
-        <div class="mushroom-art">
-          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
-            <ellipse cx="160" cy="140" rx="30" ry="8" fill="rgba(0,0,0,0.2)"/>
-            <rect x="152" y="85" width="16" height="58" rx="4" fill="#C4A882"/>
-            <ellipse cx="160" cy="82" rx="42" ry="18" fill="#8AAF70"/>
-            <ellipse cx="160" cy="76" rx="38" ry="22" fill="#9FB88A"/>
-            <ellipse cx="55" cy="155" rx="20" ry="6" fill="rgba(0,0,0,0.15)"/>
-            <rect x="49" y="115" width="12" height="42" rx="3" fill="#C4A882"/>
-            <ellipse cx="55" cy="113" rx="30" ry="13" fill="#8AAF70"/>
-            <ellipse cx="55" cy="107" rx="27" ry="15" fill="#9FB88A"/>
-            <ellipse cx="105" cy="175" rx="40" ry="12" fill="rgba(0,0,0,0.2)"/>
-            <rect x="95" y="105" width="20" height="72" rx="5" fill="#EDE6D8"/>
-            <ellipse cx="105" cy="100" rx="60" ry="26" fill="#6B8C4E"/>
-            <ellipse cx="105" cy="92" rx="55" ry="30" fill="#7A9E5A"/>
-            <ellipse cx="105" cy="82" rx="48" ry="32" fill="#9FB88A"/>
-            <path d="M 55 100 Q 105 110 155 100" stroke="rgba(44,74,46,0.3)" stroke-width="1.5" fill="none"/>
-            <circle cx="90" cy="75" r="4" fill="rgba(254,252,248,0.6)"/>
-            <circle cx="118" cy="70" r="3" fill="rgba(254,252,248,0.5)"/>
-          </svg>
-        </div>
-        <div class="hero-badge">🌿 100% Organic<br>Kerala Grown</div>
-      </div>
-    </div>
-  </section>
-
-  <div class="stats-bar">
-    <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">Happy Families</span></div>
-    <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">Products</span></div>
-    <div class="stat-item"><span class="stat-num">24hr</span><span class="stat-label">Farm to Door</span></div>
-    <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">Chemical Free</span></div>
   </div>
-
-  <section class="about-strip">
-    <div>
-      <span class="section-tag">Our Story</span>
-      <h2 class="section-h2">Grown with Love in God's Own Country</h2>
-      <p class="body-text">Nestled in the lush greenery of Kerala, Shroommush is a passion project born from a deep love for nature and wholesome food. We cultivate premium oyster mushrooms using traditional wisdom and modern sustainable practices.</p>
-      <p class="body-text">Every batch is hand-tended, harvested at peak freshness, and delivered to your doorstep within 24 hours. No chemicals, no shortcuts — just pure, earthy goodness.</p>
-      <div class="features-grid">
-        <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg></div><h4>Zero Pesticides</h4><p>100% natural, safe for your family.</p></div>
-        <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h4>Farm Direct</h4><p>No middlemen. Freshest every time.</p></div>
-        <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>Same Day Harvest</h4><p>Picked fresh, delivered daily.</p></div>
-        <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><h4>Kerala Heritage</h4><p>Traditional farming wisdom.</p></div>
+  <div class="hero-visual">
+    <div class="mushroom-showcase">
+      <div class="mushroom-art">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+          <ellipse cx="160" cy="140" rx="30" ry="8" fill="rgba(0,0,0,0.2)"/>
+          <rect x="152" y="85" width="16" height="58" rx="4" fill="#C4A882"/>
+          <ellipse cx="160" cy="82" rx="42" ry="18" fill="#8AAF70"/>
+          <ellipse cx="160" cy="76" rx="38" ry="22" fill="#9FB88A"/>
+          <ellipse cx="55" cy="155" rx="20" ry="6" fill="rgba(0,0,0,0.15)"/>
+          <rect x="49" y="115" width="12" height="42" rx="3" fill="#C4A882"/>
+          <ellipse cx="55" cy="113" rx="30" ry="13" fill="#8AAF70"/>
+          <ellipse cx="55" cy="107" rx="27" ry="15" fill="#9FB88A"/>
+          <ellipse cx="105" cy="175" rx="40" ry="12" fill="rgba(0,0,0,0.2)"/>
+          <rect x="95" y="105" width="20" height="72" rx="5" fill="#EDE6D8"/>
+          <ellipse cx="105" cy="100" rx="60" ry="26" fill="#6B8C4E"/>
+          <ellipse cx="105" cy="92" rx="55" ry="30" fill="#7A9E5A"/>
+          <ellipse cx="105" cy="82" rx="48" ry="32" fill="#9FB88A"/>
+          <path d="M 55 100 Q 105 110 155 100" stroke="rgba(44,74,46,0.3)" stroke-width="1.5" fill="none"/>
+          <circle cx="90" cy="75" r="4" fill="rgba(254,252,248,0.6)"/>
+          <circle cx="118" cy="70" r="3" fill="rgba(254,252,248,0.5)"/>
+        </svg>
       </div>
+      <div class="hero-badge">🌿 100% Organic<br>Kerala Grown</div>
     </div>
-    <div class="mosaic">
-      <div class="mosaic-block"><svg viewBox="0 0 120 240" style="width:80%;height:80%"><ellipse cx="60" cy="175" rx="25" ry="8" fill="rgba(0,0,0,0.3)"/><rect x="53" y="115" width="14" height="62" rx="4" fill="#C4A882"/><ellipse cx="60" cy="110" rx="48" ry="22" fill="#6B8C4E"/><ellipse cx="60" cy="98" rx="44" ry="28" fill="#9FB88A"/><circle cx="48" cy="88" r="3" fill="rgba(254,252,248,0.5)"/></svg></div>
-      <div class="mosaic-block"><span style="font-size:2rem">🌿</span><span style="font-size:0.75rem;font-weight:600;color:var(--forest);text-align:center">Sustainable<br>Farming</span></div>
-      <div class="mosaic-block"><span style="font-size:2rem">🍄</span><span style="font-size:0.75rem;font-weight:600;color:var(--white);text-align:center">Premium<br>Quality</span></div>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <section style="background:var(--forest);padding:5rem 5vw;text-align:center">
-    <span class="section-tag" style="color:var(--gold);display:block;margin-bottom:0.5rem">Fresh This Week</span>
-    <h2 class="section-h2" style="color:var(--white);margin:0 auto 1rem">Ready to Cook Something <em style="color:var(--gold)">Amazing?</em></h2>
-    <p style="color:rgba(255,255,255,0.7);max-width:480px;margin:0 auto 2rem;line-height:1.7">Sign up free to unlock our curated Kerala recipes — and get 20% off your next order!</p>
-    <button class="btn-primary" onclick="showPage('recipes')" style="background:var(--gold);color:var(--forest)">Browse Recipes</button>
-  </section>
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num">500+</span><span class="stat-label">Happy Families</span></div>
+  <div class="stat-item"><span class="stat-num">7</span><span class="stat-label">Products</span></div>
+  <div class="stat-item"><span class="stat-num">24hr</span><span class="stat-label">Farm to Door</span></div>
+  <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">Chemical Free</span></div>
 </div>
 
-<!-- PRODUCTS PAGE -->
-<div class="page" id="page-products">
-  <div class="page-hero">
-    <span class="section-tag" style="display:block;margin-bottom:0.5rem">Our Products</span>
-    <h1>Fresh &amp; Processed <em style="font-style:italic;color:var(--moss)">Mushrooms</em></h1>
-    <p>Harvested fresh every morning. Tap "Buy Now" to order directly on WhatsApp — quick, personal, and farm-direct.</p>
-  </div>
-  <section class="products-section">
-    <div class="products-filter">
-      <button class="filter-btn active" onclick="filterProducts('all',this)">All Products</button>
-      <button class="filter-btn" onclick="filterProducts('fresh',this)">Fresh Mushrooms</button>
-      <button class="filter-btn" onclick="filterProducts('byproduct',this)">By-Products</button>
-    </div>
-    <div class="products-grid">
-
-      <!-- FRESH -->
-      <div class="product-card" data-cat="fresh">
-        <div class="product-img pc-white"><div class="product-badge">Best Seller</div>
-          <svg viewBox="0 0 100 80" style="width:130px;height:85px"><ellipse cx="50" cy="67" rx="22" ry="7" fill="rgba(0,0,0,0.07)"/><rect x="44" y="38" width="12" height="30" rx="3" fill="#DCDCDA"/><ellipse cx="50" cy="35" rx="38" ry="16" fill="#C8C8C6"/><ellipse cx="50" cy="28" rx="34" ry="20" fill="#E4E4E2"/></svg>
-        </div>
-        <div class="product-info">
-          <div class="product-name">White Oyster Mushrooms</div>
-          <div class="product-desc">Classic white clusters with a delicate, mild flavour. Perfect for curries, stir-fries, and soups.</div>
-          <div class="product-weight">📦 200g | 500g | 1kg</div>
-          <div class="product-footer">
-            <div class="product-price">₹100 <span>/ 200g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('White Oyster Mushrooms','₹100/200g');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card" data-cat="fresh">
-        <div class="product-img pc-grey">
-          <svg viewBox="0 0 100 80" style="width:130px;height:85px"><ellipse cx="50" cy="67" rx="22" ry="7" fill="rgba(0,0,0,0.1)"/><rect x="44" y="38" width="12" height="30" rx="3" fill="#9898A0"/><ellipse cx="50" cy="35" rx="38" ry="16" fill="#88888F"/><ellipse cx="50" cy="28" rx="34" ry="20" fill="#9898A0"/></svg>
-        </div>
-        <div class="product-info">
-          <div class="product-name">Grey Oyster Mushrooms</div>
-          <div class="product-desc">Firm grey caps with a rich earthy depth. A chef favourite — wonderful sautéed with butter and garlic.</div>
-          <div class="product-weight">📦 200g | 500g | 1kg</div>
-          <div class="product-footer">
-            <div class="product-price">₹100 <span>/ 200g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('Grey Oyster Mushrooms','₹100/250g');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card" data-cat="fresh">
-        <div class="product-img pc-pink"><div class="product-badge">Popular</div>
-          <svg viewBox="0 0 100 80" style="width:130px;height:85px"><ellipse cx="50" cy="67" rx="22" ry="7" fill="rgba(0,0,0,0.1)"/><rect x="44" y="38" width="12" height="30" rx="3" fill="#C49AB0"/><ellipse cx="50" cy="35" rx="38" ry="16" fill="#B870A0"/><ellipse cx="50" cy="28" rx="34" ry="20" fill="#CC80B0"/></svg>
-        </div>
-        <div class="product-info">
-          <div class="product-name">Pink Oyster Mushrooms</div>
-          <div class="product-desc">Stunning pink clusters with meaty texture and bold umami — perfect for Kerala-style preparations and grills.</div>
-          <div class="product-weight">📦 200g | 500g | 1kg</div>
-          <div class="product-footer">
-            <div class="product-price">₹120 <span>/ 200g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('Pink Oyster Mushrooms','₹120/250g');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- BY-PRODUCTS -->
-      <div class="product-card" data-cat="byproduct">
-        <div class="product-img pc-dried"><div class="product-badge">Long Shelf Life</div><span style="font-size:3.2rem">🍂</span></div>
-        <div class="product-info">
-          <div class="product-name">Dried Mushroom</div>
-          <div class="product-desc">Sun-dried oyster mushrooms with concentrated earthy flavour. Rehydrates beautifully for curries and biryanis.</div>
-          <div class="product-weight">📦 50g | 100g | 250g</div>
-          <div class="product-footer">
-            <div class="product-price">₹280 <span>/ 100g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('Dried Mushroom','₹280/100g');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card" data-cat="byproduct">
-        <div class="product-img pc-chutney"><span style="font-size:3.2rem">🌶️</span></div>
-        <div class="product-info">
-          <div class="product-name">Mushroom Chutney Powder</div>
-          <div class="product-desc">Kerala-spiced chutney powder from dried oyster mushrooms. Amazing with idli, dosa, and steamed rice.</div>
-          <div class="product-weight">📦 100g | 200g</div>
-          <div class="product-footer">
-            <div class="product-price">₹220 <span>/ 100g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('Mushroom Chutney Powder','₹220/100g');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card" data-cat="byproduct">
-        <div class="product-img pc-soup"><span style="font-size:3.2rem">🥣</span></div>
-        <div class="product-info">
-          <div class="product-name">Mushroom Soup Powder</div>
-          <div class="product-desc">Instant creamy mushroom soup — no preservatives, no artificial flavours. Just mix with hot water or warm milk.</div>
-          <div class="product-weight">📦 100g | 200g</div>
-          <div class="product-footer">
-            <div class="product-price">₹240 <span>/ 100g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('Mushroom Soup Powder','₹240/100g');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product-card" data-cat="byproduct">
-        <div class="product-img pc-pickle"><span style="font-size:3.2rem">🫙</span></div>
-        <div class="product-info">
-          <div class="product-name">Mushroom Pickles</div>
-          <div class="product-desc">Kerala-style spicy oyster mushroom achar made with local spices, sesame oil, and sun-dried mushrooms.</div>
-          <div class="product-weight">📦 200g | 400g jar</div>
-          <div class="product-footer">
-            <div class="product-price">₹260 <span>/ 200g</span></div>
-            <a class="buy-btn" href="#" onclick="buyNow('Mushroom Pickles','₹260/200g jar');return false;"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Buy Now</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-  <div style="background:var(--cream);padding:2.5rem 5vw;text-align:center">
-    <p style="color:var(--ink-light);font-size:0.9rem;max-width:520px;margin:0 auto">🚚 <strong style="color:var(--forest)">Free delivery</strong> on orders above ₹500 within Thrissur &amp; nearby districts. Mention code <strong>SHROOM20</strong> for 20% off!</p>
-    <button class="btn-primary" onclick="showPage('contact')" style="margin-top:1.5rem">Place a Bulk Order</button>
-  </div>
-</div>
-
-<!-- RECIPES PAGE -->
-<div class="page" id="page-recipes">
-  <div class="page-hero">
-    <span class="section-tag" style="display:block;margin-bottom:0.5rem">Kerala Kitchen</span>
-    <h1>Mushroom <em style="font-style:italic;color:var(--moss)">Recipes</em></h1>
-    <p>Sign up free to unlock full recipes — and earn a <strong style="color:var(--forest)">20% discount</strong> on your next direct purchase from Shroommush!</p>
-  </div>
-  <div class="recipes-grid">
-    <div class="recipe-card"><div class="recipe-img rc1"><div class="recipe-meta-tags"><span class="tag">Kerala</span><span class="tag">Vegan</span></div><span style="font-size:3rem">🍛</span></div><div class="recipe-info"><div class="recipe-name">Mushroom Kerala Curry</div><div class="recipe-desc">Coconut-based Kerala curry with white oyster mushrooms, aromatic spices, and fresh curry leaves.</div><div class="recipe-stats"><span class="recipe-stat">⏱ <strong>30 min</strong></span><span class="recipe-stat">👥 <strong>4 servings</strong></span><span class="recipe-stat">⭐ <strong>Easy</strong></span></div><button class="view-recipe-btn" onclick="openRecipeModal('Mushroom Kerala Curry','🍛')">View Full Recipe →</button></div></div>
-    <div class="recipe-card"><div class="recipe-img rc2"><div class="recipe-meta-tags"><span class="tag">Street Food</span><span class="tag">Snack</span></div><span style="font-size:3rem">🫓</span></div><div class="recipe-info"><div class="recipe-name">Mushroom Malabar Parotta</div><div class="recipe-desc">Flaky Malabar parotta stuffed with spiced grey oyster mushrooms — the ultimate street food combo.</div><div class="recipe-stats"><span class="recipe-stat">⏱ <strong>45 min</strong></span><span class="recipe-stat">👥 <strong>2 servings</strong></span><span class="recipe-stat">⭐ <strong>Medium</strong></span></div><button class="view-recipe-btn" onclick="openRecipeModal('Mushroom Malabar Parotta','🫓')">View Full Recipe →</button></div></div>
-    <div class="recipe-card"><div class="recipe-img rc3"><div class="recipe-meta-tags"><span class="tag">Rice</span><span class="tag">Festive</span></div><span style="font-size:3rem">🍚</span></div><div class="recipe-info"><div class="recipe-name">Oyster Mushroom Biryani</div><div class="recipe-desc">Fragrant Kerala-style biryani layered with pink oyster mushrooms, basmati rice, and fried onions.</div><div class="recipe-stats"><span class="recipe-stat">⏱ <strong>60 min</strong></span><span class="recipe-stat">👥 <strong>6 servings</strong></span><span class="recipe-stat">⭐ <strong>Medium</strong></span></div><button class="view-recipe-btn" onclick="openRecipeModal('Oyster Mushroom Biryani','🍚')">View Full Recipe →</button></div></div>
-    <div class="recipe-card"><div class="recipe-img rc4"><div class="recipe-meta-tags"><span class="tag">Quick</span><span class="tag">Keto</span></div><span style="font-size:3rem">🥘</span></div><div class="recipe-info"><div class="recipe-name">Mushroom Thoran</div><div class="recipe-desc">Kerala-style thoran with grated coconut, mustard seeds, and grey oyster mushrooms. Ready in 15 minutes!</div><div class="recipe-stats"><span class="recipe-stat">⏱ <strong>15 min</strong></span><span class="recipe-stat">👥 <strong>3 servings</strong></span><span class="recipe-stat">⭐ <strong>Easy</strong></span></div><button class="view-recipe-btn" onclick="openRecipeModal('Mushroom Thoran','🥘')">View Full Recipe →</button></div></div>
-    <div class="recipe-card"><div class="recipe-img rc5"><div class="recipe-meta-tags"><span class="tag">Fusion</span><span class="tag">Starter</span></div><span style="font-size:3rem">🍢</span></div><div class="recipe-info"><div class="recipe-name">Crispy Mushroom 65</div><div class="recipe-desc">Restaurant-style Mushroom 65 with white oyster mushrooms, yoghurt marinade, and curry leaf tempering.</div><div class="recipe-stats"><span class="recipe-stat">⏱ <strong>25 min</strong></span><span class="recipe-stat">👥 <strong>4 servings</strong></span><span class="recipe-stat">⭐ <strong>Easy</strong></span></div><button class="view-recipe-btn" onclick="openRecipeModal('Crispy Mushroom 65','🍢')">View Full Recipe →</button></div></div>
-    <div class="recipe-card"><div class="recipe-img rc6"><div class="recipe-meta-tags"><span class="tag">Soup</span><span class="tag">Healthy</span></div><span style="font-size:3rem">🥣</span></div><div class="recipe-info"><div class="recipe-name">Mushroom Rasam</div><div class="recipe-desc">Tangy, peppery traditional rasam elevated with white oyster mushrooms. Perfect for Kerala monsoon evenings.</div><div class="recipe-stats"><span class="recipe-stat">⏱ <strong>20 min</strong></span><span class="recipe-stat">👥 <strong>4 servings</strong></span><span class="recipe-stat">⭐ <strong>Easy</strong></span></div><button class="view-recipe-btn" onclick="openRecipeModal('Mushroom Rasam','🥣')">View Full Recipe →</button></div></div>
-  </div>
-</div>
-
-<!-- CONTACT PAGE -->
-<div class="page" id="page-contact">
-  <div class="page-hero">
-    <span class="section-tag" style="display:block;margin-bottom:0.5rem">Get In Touch</span>
-    <h1>Order Fresh <em style="font-style:italic;color:var(--moss)">Today</em></h1>
-    <p>Fresh stock daily. Reach out to place your order, enquire about bulk pricing, or just say hello!</p>
-  </div>
-  <section class="contact-section">
-    <div>
-      <h2 class="section-h2">Let's Talk <em style="font-style:italic">Mushrooms</em></h2>
-      <p class="body-text">We're a small family farm and love connecting with customers. Whether you're a home cook, restaurant owner, or fellow farmer, we're here.</p>
-      <div class="contact-item"><div class="contact-icon">📍</div><div><h4>Our Farm</h4><p>Thrissur District, Kerala, India<br>GPS location shared on WhatsApp</p></div></div>
-      <div class="contact-item"><div class="contact-icon">📞</div><div><h4>Call / WhatsApp</h4><p>+91 98XXX XXXXX<br>9 AM – 6 PM, Mon–Sat</p></div></div>
-      <div class="contact-item"><div class="contact-icon">📧</div><div><h4>Email</h4><p>hello@shroommush.in<br>Reply within 24 hours</p></div></div>
-      <div class="contact-item"><div class="contact-icon">🚚</div><div><h4>Delivery Areas</h4><p>Thrissur, Palakkad, Ernakulam<br>Pan-Kerala for bulk orders</p></div></div>
-    </div>
-    <div class="contact-form-box">
-      <h3>Place Your Order</h3>
-      <p>Fill in your details and we'll confirm availability and delivery within a few hours.</p>
-      <div id="orderSuccess" class="success-msg">✅ Order received! We'll WhatsApp you shortly.</div>
-      <form id="orderForm" onsubmit="submitOrder(event)">
-        <div class="form-group"><label>Your Name *</label><input type="text" placeholder="e.g. Anitha Krishnan" required></div>
-        <div class="form-group"><label>Phone Number *</label><input type="tel" placeholder="+91 98XXX XXXXX" required></div>
-        <div class="form-group"><label>Email Address</label><input type="email" placeholder="you@email.com"></div>
-        <div class="form-group"><label>District *</label><select required><option value="">Select your district</option><option>Trivandrum</option><option>Kollam</option><option>Eranakulam</option><option>Trissur</option><option>Kozhikode</option><option>Other</option></select></div>
-        <div class="form-group"><label>What would you like to order?</label><select><option value="">Select product</option><option>White Oyster Mushrooms</option><option>Grey Oyster Mushrooms</option><option>Pink Oyster Mushrooms</option><option>Dried Mushroom</option><option>Mushroom Chutney Powder</option><option>Mushroom Soup Powder</option><option>Mushroom Pickles</option><option>Bulk / Custom Order</option></select></div>
-        <button type="submit" class="form-submit">Send Order Request 🍄</button>
-      </form>
-    </div>
-  </section>
-</div>
-
-<!-- RECIPE MODAL -->
-<div class="modal-overlay" id="recipeModal">
-  <div class="modal-box">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div id="modalLeadSection">
-      <div class="lead-form-header">
-        <div style="font-size:2rem;margin-bottom:0.4rem" id="modalEmoji">🍛</div>
-        <div class="discount-pill">🎁 Unlock Recipe + Get 20% OFF</div>
-        <h3 id="modalRecipeName">Mushroom Kerala Curry</h3>
-        <p>Enter your name and WhatsApp number to unlock the full recipe — we'll also send you a <strong style="color:var(--forest)">20% discount code</strong> for your next direct order!</p>
-      </div>
-      <div id="leadSuccess" class="success-msg">🎉 Recipe unlocked! Your discount code: <strong>SHROOM20</strong> — Save this for your next WhatsApp order!</div>
-      <form id="leadForm" onsubmit="unlockRecipe(event)">
-        <div class="form-group"><label>Your Name *</label><input type="text" id="leadName" placeholder="e.g. Ramesh Nair" required></div>
-        <div class="form-group"><label>WhatsApp Number *</label><input type="tel" id="leadPhone" placeholder="+91 XXXXX XXXXX" required></div>
-        <button type="submit" class="form-submit" id="leadSubmitBtn">Unlock Recipe &amp; Get 20% OFF 🔓</button>
-      </form>
-    </div>
-    <div class="recipe-full-content" id="recipeContent">
-      <h4>Ingredients</h4>
-      <ul id="recipeIngredients"></ul>
-      <h4>Method</h4>
-      <ol id="recipeSteps"></ol>
-      <div class="tip-box"><strong>💡 Shroommush Tip</strong><p id="recipeTip"></p></div>
-      <button class="btn-primary" onclick="showPage('products');closeModal()" style="margin-top:1.5rem;width:100%;text-align:center">Shop Fresh Mushrooms →</button>
+<section class="about-strip">
+  <div>
+    <span class="section-tag">Our Story</span>
+    <h2 class="section-h2">Grown with Love in God's Own Country</h2>
+    <p class="body-text">Nestled in the lush greenery of Kerala, Shroommush is a passion project born from a deep love for nature and wholesome food. We cultivate premium oyster mushrooms using traditional wisdom and modern sustainable practices.</p>
+    <p class="body-text">Every batch is hand-tended, harvested at peak freshness, and delivered to your doorstep within 24 hours. No chemicals, no shortcuts — just pure, earthy goodness.</p>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg></div><h4>Zero Pesticides</h4><p>100% natural, safe for your family.</p></div>
+      <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><h4>Farm Direct</h4><p>No middlemen. Freshest every time.</p></div>
+      <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>Same Day Harvest</h4><p>Picked fresh, delivered daily.</p></div>
+      <div class="feature-card"><div class="feature-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB88A" stroke-width="2.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><h4>Kerala Heritage</h4><p>Traditional farming wisdom.</p></div>
     </div>
   </div>
-</div>
+  <div class="mosaic">
+    <div class="mosaic-block"><svg viewBox="0 0 120 240" style="width:80%;height:80%"><ellipse cx="60" cy="175" rx="25" ry="8" fill="rgba(0,0,0,0.3)"/><rect x="53" y="115" width="14" height="62" rx="4" fill="#C4A882"/><ellipse cx="60" cy="110" rx="48" ry="22" fill="#6B8C4E"/><ellipse cx="60" cy="98" rx="44" ry="28" fill="#9FB88A"/><circle cx="48" cy="88" r="3" fill="rgba(254,252,248,0.5)"/></svg></div>
+    <div class="mosaic-block"><span style="font-size:2rem">🌿</span><span style="font-size:0.75rem;font-weight:600;color:var(--forest);text-align:center">Sustainable<br>Farming</span></div>
+    <div class="mosaic-block"><span style="font-size:2rem">🍄</span><span style="font-size:0.75rem;font-weight:600;color:var(--white);text-align:center">Premium<br>Quality</span></div>
+  </div>
+</section>
+
+<section style="background:var(--forest);padding:5rem 5vw;text-align:center">
+  <span class="section-tag" style="color:var(--gold);display:block;margin-bottom:0.5rem">Fresh This Week</span>
+  <h2 class="section-h2" style="color:var(--white);margin:0 auto 1rem">Ready to Cook Something <em style="color:var(--gold)">Amazing?</em></h2>
+  <p style="color:rgba(255,255,255,0.7);max-width:480px;margin:0 auto 2rem;line-height:1.7">Explore our curated Kerala mushroom recipes and discover new ways to cook with fresh oyster mushrooms.</p>
+  <a href="recipes.html" class="btn-primary" style="background:var(--gold);color:var(--forest)">Browse Recipes</a>
+</section>
 
 <footer>
   <div class="footer-grid">
     <div class="footer-brand"><h3>Shroommush</h3><p>Farm fresh oyster mushrooms from the heart of Kerala. Grown with love, delivered with care.</p></div>
-    <div class="footer-col"><h4>Fresh Mushrooms</h4><a onclick="showPage('products')">White Oyster</a><a onclick="showPage('products')">Grey Oyster</a><a onclick="showPage('products')">Pink Oyster</a></div>
-    <div class="footer-col"><h4>By-Products</h4><a onclick="showPage('products')">Dried Mushroom</a><a onclick="showPage('products')">Chutney Powder</a><a onclick="showPage('products')">Soup Powder</a><a onclick="showPage('products')">Pickles</a></div>
-    <div class="footer-col"><h4>Contact</h4><a>Shroommush, Mangalapuram , Kerala</a><a>+91 6282700864</a><a></a></div>
+    <div class="footer-col"><h4>Fresh Mushrooms</h4><a href="products.html">White Oyster</a><a href="products.html">Grey Oyster</a><a href="products.html">Pink Oyster</a></div>
+    <div class="footer-col"><h4>By-Products</h4><a href="products.html">Dried Mushroom</a><a href="products.html">Chutney Powder</a><a href="products.html">Soup Powder</a><a href="products.html">Pickles</a></div>
+    <div class="footer-col"><h4>Contact</h4><a>Shroommush, Mangalapuram, Kerala</a><a>+91 6282700864</a></div>
   </div>
   <div class="footer-bottom">
     <p>© 2025 Shroommush. All rights reserved. Made with 🍄 in Kerala.</p>
     <div class="social-links"><a class="social-link">ig</a><a class="social-link">W</a><a class="social-link">fb</a></div>
   </div>
 </footer>
-<div class="toast" id="toast"></div>
 
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// CONFIG — update these two values
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const WA_NUMBER = '919876543210'; // Your number: country code + number, no + or spaces
-// Google Sheets: paste your Apps Script web app URL below after setup (see instructions)
-const SHEET_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec';
-
-// ── BANNER ──
-let bannerShown = false;
-function showBanner() { if(!bannerShown){ document.getElementById('discountBanner').classList.add('show'); bannerShown=true; } }
-function hideBanner() { document.getElementById('discountBanner').classList.remove('show'); }
-
-// ── NAVIGATION ──
-function showPage(p) {
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-  const n=document.getElementById('nav-'+p); if(n) n.classList.add('active');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
 function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
-
-// ── FILTER ──
-function filterProducts(cat,btn){
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-  document.querySelectorAll('.product-card').forEach(c=>{ c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none'; });
-}
-
-// ── WHATSAPP BUY NOW ──
-// Each product sends a tailored message specific to that product
-function buyNow(product, price) {
-  const messages = {
-    'White Oyster Mushrooms': `Hello Shroommush! 👋\n\nI'd like to order *White Oyster Mushrooms* 🍄\n💰 Price: ${price}\n\nCould you please confirm:\n• Availability for today/tomorrow\n• Delivery details for my area\n• Any bulk discount available?\n\nThank you!`,
-    'Grey Oyster Mushrooms': `Hello Shroommush! 👋\n\nI'd like to order *Grey Oyster Mushrooms* 🍄\n💰 Price: ${price}\n\nCould you please confirm:\n• Availability for today/tomorrow\n• Delivery details for my area\n• Any bulk discount available?\n\nThank you!`,
-    'Pink Oyster Mushrooms': `Hello Shroommush! 👋\n\nI'd like to order *Pink Oyster Mushrooms* 🌸🍄\n💰 Price: ${price}\n\nPink oyster looks amazing! Could you confirm:\n• Availability for today/tomorrow\n• Delivery details for my area\n• Best way to cook them?\n\nThank you!`,
-    'Dried Mushroom': `Hello Shroommush! 👋\n\nI'm interested in your *Dried Mushroom* 🍂\n💰 Price: ${price}\n\nPlease let me know:\n• Current stock availability\n• Shelf life and storage tips\n• Delivery options for my area\n\nThank you!`,
-    'Mushroom Chutney Powder': `Hello Shroommush! 👋\n\nI'd like to order *Mushroom Chutney Powder* 🌶️\n💰 Price: ${price}\n\nPlease let me know:\n• Current stock availability\n• Ingredients / spice level\n• Delivery options for my area\n\nThank you!`,
-    'Mushroom Soup Powder': `Hello Shroommush! 👋\n\nI'd like to order *Mushroom Soup Powder* 🥣\n💰 Price: ${price}\n\nPlease let me know:\n• Current stock availability\n• Serving instructions\n• Delivery options for my area\n\nThank you!`,
-    'Mushroom Pickles': `Hello Shroommush! 👋\n\nI'd like to order *Mushroom Pickles (Achar)* 🫙\n💰 Price: ${price}\n\nPlease let me know:\n• Current stock availability\n• Spice level options\n• Delivery options for my area\n\nThank you!`
-  };
-  const msg = messages[product] || `Hello Shroommush! I'd like to order ${product} (${price}). Please share availability and delivery details. Thank you!`;
-  window.open('https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg),'_blank');
-}
-
-// ── TOAST ──
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3800); }
-
-// ── RECIPE DATA ──
-const recipeData={
-  'Mushroom Kerala Curry':{
-    ingredients:['500g White Oyster Mushrooms, torn into pieces','2 cups thick coconut milk','1 onion, sliced thin','3 green chillies, slit','1 tsp turmeric powder','2 tsp coriander powder','1 tsp Kerala garam masala','Fresh curry leaves','2 tbsp coconut oil','Salt to taste'],
-    steps:['Heat coconut oil in a kadai. Add curry leaves and slit chillies — crackle 30 seconds.','Add sliced onion and sauté till golden brown, about 8–10 minutes.','Add turmeric and coriander powder. Stir on low flame for 1 minute until fragrant.','Add oyster mushrooms. Toss well to coat with spices. Cover and cook 5 minutes.','Pour in coconut milk and stir gently. Simmer on low for 8 minutes — do not boil.','Add Kerala garam masala and adjust salt. Finish with raw coconut oil drizzle.','Serve with Kerala red rice or appam.'],
-    tip:'White oyster mushrooms have a silky texture that pairs beautifully with coconut-based gravies. Avoid overcooking — they should retain a slight bite.'
-  },
-  'Mushroom Malabar Parotta':{
-    ingredients:['300g Grey Oyster Mushrooms','4 Malabar parottas','2 medium onions, sliced','2 tomatoes, chopped','2 tsp pepper powder','1 tsp fennel seeds','2 tsp ginger-garlic paste','Fresh coriander leaves','3 tbsp oil','Salt to taste'],
-    steps:['Heat oil, add fennel seeds. Fry sliced onions till deep golden.','Add ginger-garlic paste and sauté 2 minutes. Add tomatoes and cook till pulpy.','Add grey oyster mushrooms and pepper powder. Stir-fry on high heat 5–7 minutes.','Season with salt. Finish with fresh coriander.','Tear parottas into pieces, toss into mushroom masala, mix on high heat 2 minutes.','Serve hot with raita or raw onion rings.'],
-    tip:'Grey oyster mushrooms hold up to high heat wonderfully. Let them sear first for a smoky flavour before adding the masala.'
-  },
-  'Oyster Mushroom Biryani':{
-    ingredients:['500g Pink Oyster Mushrooms','2 cups basmati rice, soaked 30 min','3 large onions, fried crispy','1 cup yoghurt, whisked','Whole spices: 2 bay leaves, 4 cloves, 2 cardamom','3 tbsp ghee','Mint and coriander leaves','Saffron in warm milk (optional)','2 tsp biryani masala','Salt to taste'],
-    steps:['Marinate mushrooms in yoghurt, biryani masala, and salt for 30 minutes.','Heat ghee. Add whole spices, fry 30 seconds. Add marinated mushrooms and cook 10 minutes.','Cook soaked rice till 70% done. Drain.','Layer rice over mushroom masala. Top with fried onions, mint, coriander, and saffron milk.','Seal pot with foil and lid. Cook on low flame (dum) for 20 minutes.','Rest 10 minutes before opening. Gently mix from the sides.','Serve with raita and pappadom.'],
-    tip:'Pink oyster mushrooms have a naturally meaty flavour perfect for biryani. Do not overcook in the initial sauté — they finish in the dum process.'
-  },
-  'Mushroom Thoran':{
-    ingredients:['400g Grey Oyster Mushrooms, shredded by hand','1/2 cup freshly grated coconut','2 shallots, minced','3 green chillies, chopped','1/2 tsp turmeric','1 tsp mustard seeds','Curry leaves','2 tbsp coconut oil','Salt to taste'],
-    steps:['Heat coconut oil. Crackle mustard seeds. Add curry leaves.','Add shallots and green chillies. Sauté 3 minutes.','Add shredded mushrooms and turmeric. Stir-fry on high heat 4–5 minutes.','Mix in grated coconut. Toss well. Cover and cook 3 minutes on low.','Adjust salt. Serve alongside Kerala red rice and sambar.'],
-    tip:'Shred mushrooms by hand for more surface area — this helps coconut absorb into the mushroom beautifully.'
-  },
-  'Crispy Mushroom 65':{
-    ingredients:['400g White Oyster Mushrooms','3 tbsp all-purpose flour','2 tbsp cornflour','1/2 cup yoghurt','2 tsp red chilli powder','1 tsp garam masala','1 tsp ginger-garlic paste','Fresh curry leaves for tempering','Oil for deep frying','Salt to taste'],
-    steps:['Mix yoghurt, flour, cornflour, chilli powder, garam masala, ginger-garlic paste, and salt into a thick batter.','Coat mushrooms evenly. Rest 10 minutes.','Deep fry in hot oil in batches till golden and crispy. Drain on paper.','Heat 1 tsp oil separately. Fry curry leaves till crisp.','Toss fried mushrooms with curry leaves and serve immediately.'],
-    tip:'Keep the oil at 175°C for maximum crispiness. Small batches are key — overcrowding drops the oil temperature and makes them soggy.'
-  },
-  'Mushroom Rasam':{
-    ingredients:['300g White Oyster Mushrooms, sliced','2 tomatoes, roughly chopped','Tamarind — small lemon-sized ball, soaked','1 tsp black pepper powder','1 tsp cumin seeds','4 garlic cloves, crushed','Curry leaves and dried red chilli','Mustard seeds for tempering','2 tbsp oil','Salt and jaggery to taste'],
-    steps:['Extract tamarind water. Set aside.','Boil tomatoes in 2 cups water until soft. Mash and strain.','Add tamarind water to tomato stock. Add garlic, pepper, cumin, salt, and a pinch of jaggery.','Add sliced oyster mushrooms. Simmer 10 minutes.','Temper mustard seeds, curry leaves, and dried red chilli in oil. Pour over rasam.','Serve piping hot as a soup or with rice.'],
-    tip:'White oyster mushrooms add natural umami depth that transforms this traditional rasam into something truly special on a Kerala monsoon evening.'
-  }
-};
-
-// ── RECIPE MODAL ──
-let currentRecipe='';
-function openRecipeModal(name,emoji){
-  currentRecipe=name;
-  document.getElementById('modalRecipeName').textContent=name;
-  document.getElementById('modalEmoji').textContent=emoji||'🍄';
-  document.getElementById('recipeContent').classList.remove('visible');
-  document.getElementById('leadForm').style.display='';
-  document.getElementById('leadSuccess').classList.remove('show');
-  document.getElementById('leadSubmitBtn').innerHTML='Unlock Recipe &amp; Get 20% OFF 🔓';
-  document.getElementById('leadSubmitBtn').disabled=false;
-  document.getElementById('leadName').value='';
-  document.getElementById('leadPhone').value='';
-  document.getElementById('recipeModal').classList.add('open');
-  document.body.style.overflow='hidden';
-  // Show the discount banner
-  showBanner();
-}
-function closeModal(){ document.getElementById('recipeModal').classList.remove('open'); document.body.style.overflow=''; }
-document.getElementById('recipeModal').addEventListener('click',function(e){ if(e.target===this) closeModal(); });
-
-// ── GOOGLE SHEETS SUBMISSION ──
-async function sendLead(name,phone,recipe){
-  try{
-    const url=SHEET_URL+'?name='+encodeURIComponent(name)+'&phone='+encodeURIComponent(phone)+'&recipe='+encodeURIComponent(recipe)+'&timestamp='+encodeURIComponent(new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'}))+'&source=Recipe+Unlock';
-    await fetch(url,{method:'GET',mode:'no-cors'});
-  }catch(e){ console.log('Sheets note:',e); }
-}
-
-async function unlockRecipe(e){
-  e.preventDefault();
-  const name=document.getElementById('leadName').value.trim();
-  const phone=document.getElementById('leadPhone').value.trim();
-  if(!name||!phone) return;
-  const btn=document.getElementById('leadSubmitBtn');
-  btn.innerHTML='Saving...<span class="spinner"></span>';
-  btn.disabled=true;
-  await sendLead(name,phone,currentRecipe);
-  document.getElementById('leadSuccess').classList.add('show');
-  document.getElementById('leadForm').style.display='none';
-  const d=recipeData[currentRecipe];
-  if(d){
-    document.getElementById('recipeIngredients').innerHTML=d.ingredients.map(i=>'<li>'+i+'</li>').join('');
-    document.getElementById('recipeSteps').innerHTML=d.steps.map(s=>'<li>'+s+'</li>').join('');
-    document.getElementById('recipeTip').textContent=d.tip;
-  }
-  document.getElementById('recipeContent').classList.add('visible');
-  showToast('🎉 Hi '+name.split(' ')[0]+'! Recipe unlocked. Use code SHROOM20 for 20% off!');
-}
-
-// ── ORDER FORM ──
-function submitOrder(e){
-  e.preventDefault();
-  document.getElementById('orderSuccess').style.display='block';
-  e.target.style.display='none';
-  showToast('✅ Order submitted! We\'ll WhatsApp you soon.');
-}
+function hideBanner() { document.getElementById('discountBanner').classList.remove('show'); }
+setTimeout(function(){ document.getElementById('discountBanner').classList.add('show'); }, 3000);
 </script>
 </body>
 </html>
