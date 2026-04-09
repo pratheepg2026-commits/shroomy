@@ -10,7 +10,7 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="index.html"><span></span>Shroommush</a>
+  <a class="nav-logo" href="index.html"><img src="img/logo.png" alt="" class="nav-logo-img">Shroommush</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="products.html">Products</a></li>
@@ -46,14 +46,17 @@
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div style="font-size:2rem;margin-bottom:0.5rem" id="modalEmoji">🍛</div>
-    <h3 id="modalRecipeName" style="font-family:var(--font-display);font-size:1.4rem;color:var(--forest);margin-bottom:1.5rem"></h3>
+    <h3 id="modalRecipeName" style="font-family:var(--font-display);font-size:1.4rem;color:var(--forest);margin-bottom:1rem"></h3>
+    <div class="modal-video" id="modalVideo">
+      <iframe id="recipeVideoIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
     <div class="recipe-full-content" id="recipeContent" style="display:block;margin-top:0;padding-top:0;border-top:none">
       <h4>Ingredients</h4>
       <ul id="recipeIngredients"></ul>
       <h4>Method</h4>
       <ol id="recipeSteps"></ol>
       <div class="tip-box"><strong>💡 Shroommush Tip</strong><p id="recipeTip"></p></div>
-      <a href="products.html" onclick="closeModal()" class="btn-primary" style="margin-top:1.5rem;display:block;text-align:center">Shop Fresh Mushrooms →</a>
+      <a href="#" id="modalWhatsAppBtn" class="btn-primary" style="margin-top:1.5rem;display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;text-decoration:none" target="_blank"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#fff;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.115 1.531 5.838L.057 23.999l6.304-1.654A11.944 11.944 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.522-5.18-1.43L3 21.892l1.347-4.698A10 10 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>Order on WhatsApp</a>
     </div>
   </div>
 </div>
@@ -76,33 +79,40 @@
 function toggleMenu(){ document.getElementById('mobileMenu').classList.toggle('open'); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3800); }
 
+const WA_NUMBER = '916282700864';
 const recipeData={
   'Mushroom Kerala Curry':{
+    videoId:'',
     ingredients:['500g White Oyster Mushrooms, torn into pieces','2 cups thick coconut milk','1 onion, sliced thin','3 green chillies, slit','1 tsp turmeric powder','2 tsp coriander powder','1 tsp Kerala garam masala','Fresh curry leaves','2 tbsp coconut oil','Salt to taste'],
     steps:['Heat coconut oil in a kadai. Add curry leaves and slit chillies — crackle 30 seconds.','Add sliced onion and sauté till golden brown, about 8–10 minutes.','Add turmeric and coriander powder. Stir on low flame for 1 minute until fragrant.','Add oyster mushrooms. Toss well to coat with spices. Cover and cook 5 minutes.','Pour in coconut milk and stir gently. Simmer on low for 8 minutes — do not boil.','Add Kerala garam masala and adjust salt. Finish with raw coconut oil drizzle.','Serve with Kerala red rice or appam.'],
     tip:'White oyster mushrooms have a silky texture that pairs beautifully with coconut-based gravies. Avoid overcooking — they should retain a slight bite.'
   },
   'Mushroom Malabar Parotta':{
+    videoId:'',
     ingredients:['300g Grey Oyster Mushrooms','4 Malabar parottas','2 medium onions, sliced','2 tomatoes, chopped','2 tsp pepper powder','1 tsp fennel seeds','2 tsp ginger-garlic paste','Fresh coriander leaves','3 tbsp oil','Salt to taste'],
     steps:['Heat oil, add fennel seeds. Fry sliced onions till deep golden.','Add ginger-garlic paste and sauté 2 minutes. Add tomatoes and cook till pulpy.','Add grey oyster mushrooms and pepper powder. Stir-fry on high heat 5–7 minutes.','Season with salt. Finish with fresh coriander.','Tear parottas into pieces, toss into mushroom masala, mix on high heat 2 minutes.','Serve hot with raita or raw onion rings.'],
     tip:'Grey oyster mushrooms hold up to high heat wonderfully. Let them sear first for a smoky flavour before adding the masala.'
   },
   'Oyster Mushroom Biryani':{
+    videoId:'',
     ingredients:['500g Pink Oyster Mushrooms','2 cups basmati rice, soaked 30 min','3 large onions, fried crispy','1 cup yoghurt, whisked','Whole spices: 2 bay leaves, 4 cloves, 2 cardamom','3 tbsp ghee','Mint and coriander leaves','Saffron in warm milk (optional)','2 tsp biryani masala','Salt to taste'],
     steps:['Marinate mushrooms in yoghurt, biryani masala, and salt for 30 minutes.','Heat ghee. Add whole spices, fry 30 seconds. Add marinated mushrooms and cook 10 minutes.','Cook soaked rice till 70% done. Drain.','Layer rice over mushroom masala. Top with fried onions, mint, coriander, and saffron milk.','Seal pot with foil and lid. Cook on low flame (dum) for 20 minutes.','Rest 10 minutes before opening. Gently mix from the sides.','Serve with raita and pappadom.'],
     tip:'Pink oyster mushrooms have a naturally meaty flavour perfect for biryani. Do not overcook in the initial sauté — they finish in the dum process.'
   },
   'Mushroom Thoran':{
+    videoId:'',
     ingredients:['400g Grey Oyster Mushrooms, shredded by hand','1/2 cup freshly grated coconut','2 shallots, minced','3 green chillies, chopped','1/2 tsp turmeric','1 tsp mustard seeds','Curry leaves','2 tbsp coconut oil','Salt to taste'],
     steps:['Heat coconut oil. Crackle mustard seeds. Add curry leaves.','Add shallots and green chillies. Sauté 3 minutes.','Add shredded mushrooms and turmeric. Stir-fry on high heat 4–5 minutes.','Mix in grated coconut. Toss well. Cover and cook 3 minutes on low.','Adjust salt. Serve alongside Kerala red rice and sambar.'],
     tip:'Shred mushrooms by hand for more surface area — this helps coconut absorb into the mushroom beautifully.'
   },
   'Crispy Mushroom 65':{
+    videoId:'',
     ingredients:['400g White Oyster Mushrooms','3 tbsp all-purpose flour','2 tbsp cornflour','1/2 cup yoghurt','2 tsp red chilli powder','1 tsp garam masala','1 tsp ginger-garlic paste','Fresh curry leaves for tempering','Oil for deep frying','Salt to taste'],
     steps:['Mix yoghurt, flour, cornflour, chilli powder, garam masala, ginger-garlic paste, and salt into a thick batter.','Coat mushrooms evenly. Rest 10 minutes.','Deep fry in hot oil in batches till golden and crispy. Drain on paper.','Heat 1 tsp oil separately. Fry curry leaves till crisp.','Toss fried mushrooms with curry leaves and serve immediately.'],
     tip:'Keep the oil at 175°C for maximum crispiness. Small batches are key — overcrowding drops the oil temperature and makes them soggy.'
   },
   'Mushroom Rasam':{
+    videoId:'',
     ingredients:['300g White Oyster Mushrooms, sliced','2 tomatoes, roughly chopped','Tamarind — small lemon-sized ball, soaked','1 tsp black pepper powder','1 tsp cumin seeds','4 garlic cloves, crushed','Curry leaves and dried red chilli','Mustard seeds for tempering','2 tbsp oil','Salt and jaggery to taste'],
     steps:['Extract tamarind water. Set aside.','Boil tomatoes in 2 cups water until soft. Mash and strain.','Add tamarind water to tomato stock. Add garlic, pepper, cumin, salt, and a pinch of jaggery.','Add sliced oyster mushrooms. Simmer 10 minutes.','Temper mustard seeds, curry leaves, and dried red chilli in oil. Pour over rasam.','Serve piping hot as a soup or with rice.'],
     tip:'White oyster mushrooms add natural umami depth that transforms this traditional rasam into something truly special on a Kerala monsoon evening.'
@@ -117,11 +127,26 @@ function openRecipeModal(name, emoji) {
     document.getElementById('recipeIngredients').innerHTML = d.ingredients.map(i => '<li>' + i + '</li>').join('');
     document.getElementById('recipeSteps').innerHTML = d.steps.map(s => '<li>' + s + '</li>').join('');
     document.getElementById('recipeTip').textContent = d.tip;
+    const videoContainer = document.getElementById('modalVideo');
+    const videoIframe = document.getElementById('recipeVideoIframe');
+    if (d.videoId) {
+      videoIframe.src = 'https://www.youtube.com/embed/' + d.videoId + '?rel=0';
+      videoContainer.style.display = 'block';
+    } else {
+      videoIframe.src = '';
+      videoContainer.style.display = 'none';
+    }
   }
+  const waMsg = encodeURIComponent('Hello Shroommush! 👋\n\nI tried your *' + name + '* recipe and would love to order some fresh mushrooms!\n\nCould you please share availability and delivery details?\n\nThank you!');
+  document.getElementById('modalWhatsAppBtn').href = 'https://wa.me/' + WA_NUMBER + '?text=' + waMsg;
   document.getElementById('recipeModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeModal(){ document.getElementById('recipeModal').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModal(){
+  document.getElementById('recipeModal').classList.remove('open');
+  document.body.style.overflow = '';
+  document.getElementById('recipeVideoIframe').src = '';
+}
 document.getElementById('recipeModal').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
 </script>
 </body>
